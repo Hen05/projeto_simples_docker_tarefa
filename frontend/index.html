@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Frontend - Teste de Conexão</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 2rem; }
+      button { padding: 0.5rem 1rem; font-size: 1rem; }
+      pre { background:#f5f5f5; padding:1rem; white-space:pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Frontend - Teste de Conexão</h1>
+    <button id="btn">Testar Conexão</button>
+    <h2>Resposta:</h2>
+    <pre id="out">--</pre>
+
+    <script>
+      const out = document.getElementById('out');
+      document.getElementById('btn').addEventListener('click', async () => {
+        out.textContent = 'Testando...';
+        const urls = ['/api/status', 'http://localhost:3000/api/status'];
+        for (const url of urls) {
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(res.status || res.statusText);
+            const data = await res.json();
+            out.textContent = JSON.stringify(data, null, 2);
+            return;
+          } catch (err) {
+            // tenta próximo
+          }
+        }
+        out.textContent = 'Falha ao conectar ao backend.';
+      });
+    </script>
+  </body>
+</html>
